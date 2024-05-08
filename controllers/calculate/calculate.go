@@ -261,7 +261,7 @@ func evaluate(postfix []*Token) (string, []string, error) {
 				step := fmt.Sprintf("%s%g = %g", token.Value, top, result)
 				steps = append(steps, step)
 			} else {
-				if len(stack) < 1 {
+				if len(stack) < 2 {
 					return "", steps, fmt.Errorf("Invalid %s at position %d", token.Value, token.Position)
 				}
 				valueFirst := stack[len(stack)-2]

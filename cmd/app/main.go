@@ -28,7 +28,7 @@ func main() {
 	r.Handle("/*", http.FileServer(http.Dir("./web")))
 
 	// run the server
-	port := fmt.Sprintf(":%v", getenv("SERVER_PORT", "3000"))
+	port := fmt.Sprintf(":%v", getenv("PORT", "3000"))
 	if err := http.ListenAndServe(port, r); err != nil {
 		log.Fatal(err)
 	}

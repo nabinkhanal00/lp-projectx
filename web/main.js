@@ -41,16 +41,8 @@ for (let button of calculatorButtons) {
     })
 }
 
-let histories = [
-    {
-        id: "history-1",
-        "error": false,
-        "message": undefined,
-        expression: "6+5",
-        result: 11,
-        steps: ["6 + 5 = 11"]
-    }
-]
+
+let histories = JSON.parse(localStorage.getItem("histories")) || []
 
 
 let current_history = histories.length;
@@ -74,6 +66,7 @@ const handleDisplayHistory = (h) => {
 historyClearBtn.addEventListener('click', () => {
     histories = []
     history.innerHTML = ""
+    localStorage.setItem("histories", JSON.stringify([]))
 })
 
 const handleHistoryClick = (event) => {
@@ -143,6 +136,7 @@ const handleCalculate = async () => {
                 steps: data.steps
             }
             histories.push(h)
+            localStorage.setItem("histories", JSON.stringify(histories))
             handleResult(h)
         }
     }
