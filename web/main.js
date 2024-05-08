@@ -82,10 +82,9 @@ const handleDeleteSingleHistory = (event) => {
     histories = histories.filter((h) => h.id != id)
     localStorage.setItem("histories", JSON.stringify(histories))
     history.innerHTML = ""
-    for (let h of histories) {
-        handleAddHistory(h)
+    for (let hs of histories) {
+        handleAddHistory(hs)
     }
-
 }
 
 
