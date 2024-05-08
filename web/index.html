@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer> </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .output-section {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-200 flex justify-center items-center min-h-screen">
+    <div class="container mx-auto px-8 overflow-hidden">
+
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">Project X</h1>
+            <p class="text-gray-600">The Ultimate Expression Evaluator</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
+            <div class="bg-white p-4 rounded-lg shadow-md h-full overflow-y-auto output-section">
+                <h2 class="relative text-lg font-bold mb-4">History
+                    <button id="historyClearBtn" class="absolute right-0"><svg xmlns="http://www.w3.org/2000/svg"
+                            x="0px" y="0px" width="20" height="20" viewBox="0 0 64 64" class="fill-red-500">
+                            <path
+                                d="M 28 6 C 25.791 6 24 7.791 24 10 L 24 12 L 23.599609 12 L 10 14 L 10 17 L 54 17 L 54 14 L 40.400391 12 L 40 12 L 40 10 C 40 7.791 38.209 6 36 6 L 28 6 z M 28 10 L 36 10 L 36 12 L 28 12 L 28 10 z M 12 19 L 14.701172 52.322266 C 14.869172 54.399266 16.605453 56 18.689453 56 L 45.3125 56 C 47.3965 56 49.129828 54.401219 49.298828 52.324219 L 51.923828 20 L 12 19 z M 20 26 C 21.105 26 22 26.895 22 28 L 22 51 L 19 51 L 18 28 C 18 26.895 18.895 26 20 26 z M 32 26 C 33.657 26 35 27.343 35 29 L 35 51 L 29 51 L 29 29 C 29 27.343 30.343 26 32 26 z M 44 26 C 45.105 26 46 26.895 46 28 L 45 51 L 42 51 L 42 28 C 42 26.895 42.895 26 44 26 z">
+                            </path>
+                        </svg></button>
+                </h2>
+                <ul id="history" class="list-disc pl-4 space-y-2">
+                </ul>
+            </div>
+            <div class="bg-gray-300 p-8 rounded-3xl shadow-inner h-full overflow-y-auto">
+                <h2 class="text-lg font-bold mb-4 text-center">Calculator</h2>
+                <div class="mb-4">
+                    <input type="text" id="input"
+                        class="w-full border-none bg-gray-200 rounded-lg py-2 px-3 text-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                        placeholder="Enter expression">
+                </div>
+                <div class="calcBtn grid grid-cols-4 gap-4">
+                    <button id="("
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        (
+                    </button>
+                    <button id=")"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        )
+                    </button>
+                    <button id="C"
+                        class="calcBtn bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-md">
+                        C
+                    </button>
+                    <button id="/"
+                        class="calcBtn bg-orange-500 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg shadow-md">
+                        /
+                    </button>
+                    <button id="7"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        7
+                    </button>
+                    <button id="8"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        8
+                    </button>
+                    <button id="9"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        9
+                    </button>
+                    <button id="*"
+                        class="calcBtn bg-orange-500 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg shadow-md">
+                        *
+                    </button>
+                    <button id="4"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        4
+                    </button>
+                    <button id="5"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        5
+                    </button>
+                    <button id="6"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        6
+                    </button>
+                    <button id="-"
+                        class="calcBtn bg-orange-500 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg shadow-md">
+                        -
+                    </button>
+                    <button id="1"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        1
+                    </button>
+                    <button id="2"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        2
+                    </button>
+                    <button id="3"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        3
+                    </button>
+                    <button id="+"
+                        class="calcBtn bg-orange-500 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg shadow-md">
+                        +
+                    </button>
+                    <button id="0"
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md col-span-2">
+                        0
+                    </button>
+                    <button id="."
+                        class="calcBtn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg shadow-md">
+                        .
+                    </button>
+                    <button id="calculate"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md col-span-2">
+                        Evaluate
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white px-4 rounded-lg shadow-md overflow-y-auto output-section relative">
+                <div class="sticky top-0 ">
+                    <h2 class="text-lg py-5 font-bold bg-white left-0">Evaluation Process</h2>
+                    <div id="query" class="text-lg mb-5 font-bold bg-gray-100 p-2 rounded-md overflow-x-auto">Query: 0
+                    </div>
+                    <div id="result" class="text-lg mb-5 font-bold bg-gray-100 p-2 rounded-md overflow-x-auto">Result: 0
+                    </div>
+                </div>
+
+                <ol id="steps" class="list-decimal pl-6 space-y-2">
+                </ol>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
