@@ -23,16 +23,14 @@ func CalculateController(w http.ResponseWriter, r *http.Request) {
 
 	var response Response
 
-	answer, steps, err := calculate(request.Query)
+	answer, steps, err := Calculate(request.Query)
 	if err != nil {
-
 		response = Response{
 			Expression: request.Query,
 			Error:      true,
 			Message:    err.Error(),
 		}
 	} else {
-
 		response = Response{
 			Expression: request.Query,
 			Error:      false,

@@ -3,22 +3,6 @@ package calculate
 import (
 	"fmt"
 	"strconv"
-	"unicode"
-)
-
-type TokenType int
-
-const (
-	NUMBER TokenType = iota
-	PLUS
-	MINUS
-	PLUS_UNARY
-	MINUS_UNARY
-	MULTIPLY
-	DIVIDE
-	LPAREN
-	RPAREN
-	ILLEGAL
 )
 
 var priorityMap map[TokenType]int = map[TokenType]int{
@@ -31,128 +15,6 @@ var priorityMap map[TokenType]int = map[TokenType]int{
 	MINUS_UNARY: 3,
 }
 
-func (t TokenType) toString() string {
-	switch int(t) {
-	case int(NUMBER):
-		return "NUMBER"
-	case int(PLUS):
-		return "PLUS"
-	case int(MINUS):
-		return "MINUS"
-	case int(PLUS_UNARY):
-		return "PLUS_UNARY"
-	case int(MINUS_UNARY):
-		return "MINUS_UNARY"
-	case int(MULTIPLY):
-		return "MULTIPLY"
-	case int(DIVIDE):
-		return "DIVIDE"
-	case int(LPAREN):
-		return "LPAREN"
-	case int(RPAREN):
-		return "RPAREN"
-	case int(ILLEGAL):
-		return "ILLEGAL"
-	}
-	return "UNKNOWN"
-}
-
-type Token struct {
-	Type     TokenType
-	Value    string
-	Position int
-}
-
-func (t Token) String() string {
-	return fmt.Sprintf("TOKEN(TYPE: %s VALUE: %s POSIITON: %d)", t.Type.toString(), t.Value, t.Position)
-}
-
-func tokenize(expr string) []Token {
-	var tokens []Token
-	index := 0
-	runeArray := []rune(expr)
-	previous_paren := false
-	for index < len(runeArray) {
-		char := runeArray[index]
-		switch {
-		case unicode.IsDigit(char) || char == '.':
-			var currentNumber string
-			foundIllegal := false
-			foundDot := false
-			foundOther := false
-			for index < len(runeArray) {
-				char = runeArray[index]
-				if unicode.IsDigit(char) || char == '.' {
-					currentNumber += string(char)
-					if char == '.' {
-						if foundDot {
-							foundIllegal = true
-						}
-						foundDot = true
-					}
-					index++
-				} else {
-					foundOther = true
-					break
-				}
-			}
-			if foundOther {
-				index--
-			}
-			if foundIllegal {
-				tokens = append(tokens, Token{Type: ILLEGAL, Value: currentNumber, Position: index})
-			} else {
-				tokens = append(tokens, Token{Type: NUMBER, Value: currentNumber, Position: index})
-			}
-		case char == ' ':
-			break
-		case char == '+':
-			if previous_paren || index == 0 {
-				tokens = append(tokens, Token{Type: PLUS_UNARY, Value: string(char), Position: index})
-			} else {
-				tokens = append(tokens, Token{Type: PLUS, Value: string(char), Position: index})
-			}
-		case char == '-':
-			if previous_paren || index == 0 {
-				tokens = append(tokens, Token{Type: MINUS_UNARY, Value: string(char), Position: index})
-			} else {
-
-				tokens = append(tokens, Token{Type: MINUS, Value: string(char), Position: index})
-			}
-		case char == '*':
-			tokens = append(tokens, Token{Type: MULTIPLY, Value: string(char), Position: index})
-		case char == '/':
-			tokens = append(tokens, Token{Type: DIVIDE, Value: string(char), Position: index})
-		case char == '(':
-			tokens = append(tokens, Token{Type: LPAREN, Value: string(char), Position: index})
-		case char == ')':
-			tokens = append(tokens, Token{Type: RPAREN, Value: string(char), Position: index})
-		default:
-			tokens = append(tokens, Token{Type: ILLEGAL, Value: string(char), Position: index})
-		}
-		if char == '(' {
-			previous_paren = true
-		} else {
-			previous_paren = false
-		}
-		index++
-	}
-	correctedTokens := []Token{}
-	var prevToken *Token
-	for _, token := range tokens {
-		if prevToken != nil && token.Type == LPAREN && prevToken.Type == NUMBER {
-			correctedTokens = append(correctedTokens, Token{
-				Type:     MULTIPLY,
-				Value:    "*",
-				Position: -1,
-			})
-		}
-		correctedTokens = append(correctedTokens, token)
-		prevToken = &token
-	}
-
-	return correctedTokens
-}
 func rpn(tokens []Token) ([]*Token, error) {
 	postfix := []*Token{}
 
@@ -218,7 +80,7 @@ func rpn(tokens []Token) ([]*Token, error) {
 
 func isTokenizationValid(tokens []Token) error {
 	parenCount := 0
-
+	var prevToken *Token
 	for _, token := range tokens {
 		if token.Type == LPAREN {
 			parenCount++
@@ -229,9 +91,14 @@ func isTokenizationValid(tokens []Token) error {
 
 			}
 		}
+		if prevToken != nil && (prevToken.Type.isOperator() && token.Type.isOperator()) {
+
+			return fmt.Errorf("Invalid token %v at position %d.", token.Value, token.Position)
+		}
 		if token.Type == ILLEGAL {
 			return fmt.Errorf("Illegal token %v at position %d.", token.Value, token.Position)
 		}
+		prevToken = &token
 	}
 	return nil
 }
@@ -292,15 +159,11 @@ func evaluate(postfix []*Token) (string, []string, error) {
 	if len(stack) != 1 {
 		return "", steps, fmt.Errorf("Unknown error")
 	}
-	result := strconv.FormatFloat(stack[len(stack)-1], 'g', 15, 64)
+	result := formatFloat(stack[len(stack)-1], 15)
 	return fmt.Sprintf("%v", result), steps, nil
 }
 
-func formatFloat(value float64, precision int) string {
-	return strconv.FormatFloat(value, 'g', precision, 64)
-}
-
-func calculate(expression string) (string, []string, error) {
+func Calculate(expression string) (string, []string, error) {
 	tokens := tokenize(expression)
 	err := isTokenizationValid(tokens)
 	if err != nil {

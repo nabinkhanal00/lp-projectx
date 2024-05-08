@@ -1,52 +1,88 @@
 package calculate
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
-func checkValidToken(i, j Token) bool {
-	if i.Type == j.Type && i.Value == j.Value {
-		return true
+func TestRPN(t *testing.T) {
+	tokens := []Token{
+		{Type: LPAREN, Value: "("},
+		{Type: NUMBER, Value: "5"},
+		{Type: PLUS, Value: "+"},
+		{Type: NUMBER, Value: "3"},
+		{Type: RPAREN, Value: ")"},
+		{Type: MULTIPLY, Value: "*"},
+		{Type: LPAREN, Value: "("},
+		{Type: NUMBER, Value: "10"},
+		{Type: MINUS, Value: "-"},
+		{Type: NUMBER, Value: "2"},
+		{Type: RPAREN, Value: ")"},
+		{Type: DIVIDE, Value: "/"},
+		{Type: NUMBER, Value: "4"},
 	}
-	return false
+	expectedPostfix := []*Token{
+		{Type: NUMBER, Value: "5"},
+		{Type: NUMBER, Value: "3"},
+		{Type: PLUS, Value: "+"},
+		{Type: NUMBER, Value: "10"},
+		{Type: NUMBER, Value: "2"},
+		{Type: MINUS, Value: "-"},
+		{Type: MULTIPLY, Value: "*"},
+		{Type: NUMBER, Value: "4"},
+		{Type: DIVIDE, Value: "/"},
+	}
+	result, err := rpn(tokens)
+	if err != nil {
+		t.Errorf("RPN failed with error: %v", err)
+	}
+	if !reflect.DeepEqual(result, expectedPostfix) {
+		t.Errorf("RPN failed. Expected: %v, Got: %v", expectedPostfix, result)
+	}
 }
 
-func checkValidTokenWithPosition(i, j Token) bool {
-	if i.Type == j.Type && i.Value == j.Value {
-		return true
+func TestIsTokenizationValid(t *testing.T) {
+	validTokens := []Token{
+		{Type: LPAREN, Value: "("},
+		{Type: NUMBER, Value: "5"},
+		{Type: PLUS, Value: "+"},
+		{Type: NUMBER, Value: "3"},
+		{Type: RPAREN, Value: ")"},
 	}
-	return false
+	if err := isTokenizationValid(validTokens); err != nil {
+		t.Errorf("Tokenization validation failed. Expected valid tokens, got error: %v", err)
+	}
+
+	invalidTokens := []Token{
+		{Type: LPAREN, Value: "("},
+		{Type: NUMBER, Value: "5"},
+		{Type: PLUS, Value: "+"},
+		{Type: NUMBER, Value: "3"},
+		{Type: RPAREN, Value: ")"},
+		{Type: RPAREN, Value: ")"},
+	}
+	if err := isTokenizationValid(invalidTokens); err == nil {
+		t.Errorf("Tokenization validation failed. Expected invalid tokens, got no error")
+	}
 }
-func TestTokenizer(t *testing.T) {
-
-	type exprToToken struct {
-		expression string
-		tokens     []Token
-		fun        func(Token, Token) bool
+func TestEvaluate(t *testing.T) {
+	postfix := []*Token{
+		{Type: NUMBER, Value: "5"},
+		{Type: NUMBER, Value: "3"},
+		{Type: PLUS, Value: "+"},
+		{Type: NUMBER, Value: "10"},
+		{Type: NUMBER, Value: "2"},
+		{Type: MINUS, Value: "-"},
+		{Type: MULTIPLY, Value: "*"},
+		{Type: NUMBER, Value: "4"},
+		{Type: DIVIDE, Value: "/"},
 	}
-
-	exprToTokens := map[string]exprToToken{
-		"simpleNumber": {
-			expression: "1",
-			tokens: []Token{
-				{
-					Type:  NUMBER,
-					Value: "1",
-				},
-			},
-			fun: checkValidToken,
-		},
+	expectedResult := "16"
+	result, _, err := evaluate(postfix)
+	if err != nil {
+		t.Errorf("Evaluate failed with error: %v", err)
 	}
-
-	for name, exptt := range exprToTokens {
-		outputTokens := tokenize(exptt.expression)
-		if len(outputTokens) != len(exptt.tokens) {
-			t.Errorf("Test for %v failed:\n different length of tokens.", name)
-		}
-		for i := 0; i < len(outputTokens); i++ {
-			if !exptt.fun(outputTokens[i], exptt.tokens[i]) {
-				t.Errorf("Test for %v failed:\n Expected %v\n Got %v", name, exptt.tokens[i], outputTokens[i])
-			}
-		}
-
+	if result != expectedResult {
+		t.Errorf("Evaluate failed. Expected result: %s, Got: %s", expectedResult, result)
 	}
-
 }
