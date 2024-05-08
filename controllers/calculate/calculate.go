@@ -258,7 +258,7 @@ func evaluate(postfix []*Token) (string, []string, error) {
 					result = -1 * top
 				}
 				stack[len(stack)-1] = result
-				step := fmt.Sprintf("%s%g = %g", token.Value, top, result)
+				step := fmt.Sprintf("%s%v = %v", token.Value, formatFloat(top, 15), formatFloat(result, 15))
 				steps = append(steps, step)
 			} else {
 				if len(stack) < 2 {
@@ -273,23 +273,17 @@ func evaluate(postfix []*Token) (string, []string, error) {
 				switch token.Type {
 				case PLUS:
 					result = valueFirst + valueSecond
-					step = fmt.Sprintf("%g %s %g = %g", valueFirst, token.Value, valueSecond, result)
-
 				case MINUS:
 					result = valueFirst - valueSecond
-					step = fmt.Sprintf("%g %s %g = %g", valueFirst, token.Value, valueSecond, result)
-
 				case MULTIPLY:
 					result = valueFirst * valueSecond
-					step = fmt.Sprintf("%g %s %g = %g", valueFirst, token.Value, valueSecond, result)
-
 				case DIVIDE:
 					result = valueFirst / valueSecond
-					step = fmt.Sprintf("%g %s %g = %g", valueFirst, token.Value, valueSecond, result)
 				default:
 					return "", steps, fmt.Errorf("Unknown operator: %s at position %d", token.Value, token.Position)
-
 				}
+
+				step = fmt.Sprintf("%v %v %v = %v", formatFloat(valueFirst, 15), token.Value, formatFloat(valueSecond, 15), formatFloat(result, 15))
 				steps = append(steps, step)
 				stack = append(stack, result)
 			}
@@ -298,7 +292,12 @@ func evaluate(postfix []*Token) (string, []string, error) {
 	if len(stack) != 1 {
 		return "", steps, fmt.Errorf("Unknown error")
 	}
-	return fmt.Sprintf("%v", stack[len(stack)-1]), steps, nil
+	result := strconv.FormatFloat(stack[len(stack)-1], 'g', 15, 64)
+	return fmt.Sprintf("%v", result), steps, nil
+}
+
+func formatFloat(value float64, precision int) string {
+	return strconv.FormatFloat(value, 'g', precision, 64)
 }
 
 func calculate(expression string) (string, []string, error) {

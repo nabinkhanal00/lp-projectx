@@ -8,7 +8,6 @@ let calculate = document.getElementById("calculate")
 let historyClearBtn = document.getElementById("historyClearBtn")
 input.focus()
 
-
 const insertAtCaret = (element, text) => {
     text = text || '';
     if (element.selectionStart || element.selectionStart === 0) {
@@ -47,7 +46,7 @@ let histories = JSON.parse(localStorage.getItem("histories")) || []
 
 let current_history = histories.length;
 
-const handleDisplayHistory = (h) => {
+const handleDisplayDetails = (h) => {
     input.value = h.expression
     result.classList.remove("text-red-500")
     result.classList.add("text-blue-500")
@@ -55,11 +54,13 @@ const handleDisplayHistory = (h) => {
     query.innerHTML = `Query: ${h.expression}`
 
     steps.innerHTML = ""
-    for (let step of h.steps) {
-        let li = document.createElement("li")
-        li.appendChild(document.createTextNode(step))
-        li.classList = "bg-gray-100 p-2 rounded-md"
-        steps.appendChild(li)
+    if (h.steps) {
+        for (let step of h.steps) {
+            let li = document.createElement("li")
+            li.appendChild(document.createTextNode(step))
+            li.classList = "bg-gray-100 p-2 rounded-md"
+            steps.appendChild(li)
+        }
     }
 }
 
@@ -72,14 +73,33 @@ historyClearBtn.addEventListener('click', () => {
 const handleHistoryClick = (event) => {
     const id = event.target.id;
     const history = histories.find((h) => h.id == id)
-    handleDisplayHistory(history)
+    handleDisplayDetails(history)
+}
+const handleDeleteSingleHistory = (event) => {
+    event.stopPropagation()
+    let id = event.target.id;
+    id = id.substr(0, id.length - "-delete".length)
+    histories = histories.filter((h) => h.id != id)
+    localStorage.setItem("histories", JSON.stringify(histories))
+    history.innerHTML = ""
+    for (let h of histories) {
+        handleAddHistory(h)
+    }
+
 }
 
+
 const handleAddHistory = (h) => {
+    let button = document.createElement("button")
+    button.id = h.id + "-delete"
+    button.classList = "text-sm absolute right-2 px-4 text-red-500"
+    button.addEventListener('click', handleDeleteSingleHistory)
+    button.innerHTML = "🗑"
     let li = document.createElement("li")
     li.appendChild(document.createTextNode(`${h.expression} = ${h.result}`))
+    li.appendChild(button)
     li.id = h.id;
-    li.classList = "bg-gray-100 p-2 rounded-md cursor-pointer"
+    li.classList = "bg-gray-100 p-2 rounded-md cursor-pointer relative"
     li.addEventListener('click', handleHistoryClick)
     history.appendChild(li)
 }
@@ -91,7 +111,7 @@ for (let h of histories) {
 
 const handleResult = (h) => {
     handleAddHistory(h)
-    handleDisplayHistory(h)
+    handleDisplayDetails(h)
 }
 
 
