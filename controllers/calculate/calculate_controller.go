@@ -21,12 +21,24 @@ func CalculateController(w http.ResponseWriter, r *http.Request) {
 	request := Request{}
 	json.NewDecoder(r.Body).Decode(&request)
 
-	response := Response{
-		Expression: request.Query,
-		Error:      false,
-		Message:    "",
-		Answer:     "55",
-		Steps:      []string{"Hello", "How are you"},
+	var response Response
+
+	answer, steps, err := calculate(request.Query)
+	if err != nil {
+
+		response = Response{
+			Expression: request.Query,
+			Error:      true,
+			Message:    err.Error(),
+		}
+	} else {
+
+		response = Response{
+			Expression: request.Query,
+			Error:      false,
+			Answer:     answer,
+			Steps:      steps,
+		}
 	}
 
 	content, err := json.Marshal(response)

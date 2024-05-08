@@ -151,10 +151,8 @@ const handleCalculate = async () => {
     }
 }
 
-
-
 calculate.addEventListener("click", handleCalculate)
-input.addEventListener("keyup", (event) => {
+input.addEventListener("keyup", function(event) {
     if (event.key == "Enter") {
         handleCalculate()
     }
@@ -162,7 +160,7 @@ input.addEventListener("keyup", (event) => {
 
 input.addEventListener("input", function() {
     var input = this.value;
-    var sanitizedInput = input.replace(/[^0-9+\-*\/.]/g, '');
+    var sanitizedInput = input.replace(/[^0-9+\-*\/.\(\)]/g, '');
     if (sanitizedInput !== input) {
         this.value = sanitizedInput;
     }
