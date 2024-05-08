@@ -8,7 +8,8 @@ let calculate = document.getElementById("calculate")
 let historyClearBtn = document.getElementById("historyClearBtn")
 input.focus()
 
-const insertAtCaret = (element, text)=> {
+
+const insertAtCaret = (element, text) => {
     text = text || '';
     if (element.selectionStart || element.selectionStart === 0) {
         // Others
@@ -34,6 +35,9 @@ for (let button of calculatorButtons) {
                 break
         }
         input.focus()
+    })
+    button.addEventListener('mousedown', (event) => {
+        event.preventDefault()
     })
 }
 
@@ -80,7 +84,7 @@ const handleHistoryClick = (event) => {
 
 const handleAddHistory = (h) => {
     let li = document.createElement("li")
-    li.appendChild(document.createTextNode(`${h.expression}=${h.result}`))
+    li.appendChild(document.createTextNode(`${h.expression} = ${h.result}`))
     li.id = h.id;
     li.classList = "bg-gray-100 p-2 rounded-md cursor-pointer"
     li.addEventListener('click', handleHistoryClick)
@@ -109,8 +113,7 @@ const handleError = (data) => {
 const handleEmpty = () => {
 }
 
-
-calculate.addEventListener("click", async () => {
+const handleCalculate = async () => {
     const query = document.getElementById("input")
     if (query.value == "") {
         handleEmpty()
@@ -147,4 +150,20 @@ calculate.addEventListener("click", async () => {
         console.log(e)
     }
 }
-)
+
+
+
+calculate.addEventListener("click", handleCalculate)
+input.addEventListener("keyup", (event) => {
+    if (event.key == "Enter") {
+        handleCalculate()
+    }
+})
+
+input.addEventListener("input", function() {
+    var input = this.value;
+    var sanitizedInput = input.replace(/[^0-9+\-*\/.]/g, '');
+    if (sanitizedInput !== input) {
+        this.value = sanitizedInput;
+    }
+});
