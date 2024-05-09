@@ -22,7 +22,9 @@ docker run -it -p 3000:3000 calc
 
 ```
 
-You can then visit to `localhost:3000` to interact with the calculator.
+You can then visit to [localhost:3000](http://localhost:3000) to interact with the calculator.
+
+You can also find the app on [https://calc.nabinkhanal00.com.np](https://calc.nabinkhanal00.com.np).
 
 ## Run tests
 ```bash
@@ -30,6 +32,13 @@ You can then visit to `localhost:3000` to interact with the calculator.
 # run all tests
 go test ./...
 ```
+
+## Features
+1. Perform Addition, Subtraction, Multiplication and Division.
+2. Display the steps involved in the calculation.
+3. Record all the calculations performed.
+4. See the steps and result of all the previous calculations.
+5. Delete each history and clear all history.
 
 ## Tasks
 - [x] Build Simple UI

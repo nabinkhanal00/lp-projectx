@@ -16,18 +16,23 @@ var priorityMap map[TokenType]int = map[TokenType]int{
 }
 
 func rpn(tokens []Token) ([]*Token, error) {
+	// final result
 	postfix := []*Token{}
 
 	// would be better if we implement a real stack
 	// making it efficient
+	// stack for storing operators
 	stack := []*Token{}
 
 	current := 0
 	for current < len(tokens) {
+		// get the pointer to the current token
 		token := &tokens[current]
 		if token.Type == NUMBER {
+			// push it in the result if it is a operand
 			postfix = append(postfix, token)
 		} else if token.Type == LPAREN {
+			// push it in the staci of operators
 			stack = append(stack, token)
 		} else if token.Type == RPAREN {
 			// stack can never be empty here
@@ -56,6 +61,10 @@ func rpn(tokens []Token) ([]*Token, error) {
 		} else {
 			// for all the other operators
 
+			// append to stack if stack is empty or
+			// remove elements from the stack until
+			// the precedence of current token is less
+			// or equal to top of stack
 			if len(stack) == 0 || priorityMap[token.Type] > priorityMap[stack[len(stack)-1].Type] {
 				stack = append(stack, token)
 			} else {
@@ -71,6 +80,7 @@ func rpn(tokens []Token) ([]*Token, error) {
 		current++
 	}
 
+	// pop all the elements from t
 	for len(stack) > 0 {
 		postfix = append(postfix, stack[len(stack)-1])
 		stack = stack[:len(stack)-1]
@@ -104,6 +114,11 @@ func isTokenizationValid(tokens []Token) error {
 }
 
 func evaluate(postfix []*Token) (string, []string, error) {
+	// push operands on the stack
+	// if an operator is found
+	// pop one or two operands based on the type of operator
+	// perform the operation
+	// push result on the stack
 	steps := []string{}
 	stack := []float64{}
 	for _, token := range postfix {
