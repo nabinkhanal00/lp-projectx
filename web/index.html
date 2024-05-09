@@ -21,7 +21,7 @@
             <h1 class="text-4xl font-bold text-gray-800">Powerful Calculator</h1>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
-            <div class="bg-white p-4 rounded-lg shadow-md h-full overflow-y-auto output-section">
+            <div class="bg-white p-4 rounded-lg shadow-md overflow-y-auto output-section">
                 <h2 class="relative text-lg font-bold mb-4">History
                     <button id="historyClearBtn"
                         class="absolute right-0 bg-red-400 text-white btn px-2 rounded-lg">Clear</button>
@@ -35,6 +35,11 @@
                     <input type="text" id="input"
                         class="w-full border-none bg-gray-200 rounded-lg py-2 px-3 text-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
                         placeholder="Enter expression">
+
+                    <div id="result"
+                        class="w-full border-none bg-gray-200 rounded-lg py-2 px-3 text-lg shadow-inner text-right text-blue-500 overflow-x-auto">
+                        0
+                    </div>
                 </div>
                 <div class="calcBtn grid grid-cols-4 gap-4">
                     <button id="("
@@ -119,13 +124,10 @@
             <div class="bg-white px-4 rounded-lg shadow-md overflow-y-auto output-section relative">
                 <div class="sticky top-0 ">
                     <h2 class="text-lg py-5 font-bold bg-white left-0">Evaluation Process</h2>
-                    <div id="query" class="text-lg font-bold bg-gray-100 p-2 rounded-md overflow-x-auto">Query: 0
-                    </div>
-                    <div id="result" class="text-lg mb-5 font-bold bg-gray-100 p-2 rounded-md overflow-x-auto">Result: 0
-                    </div>
+                    <div id="query" class="text-lg font-bold bg-gray-100 p-2 mb-5 rounded-md overflow-x-auto"> </div>
                 </div>
 
-                <ol id="steps" class="list-decimal pl-6 space-y-2">
+                <ol id="steps" class="list-decimal pl-8 space-y-2">
                 </ol>
 
             </div>

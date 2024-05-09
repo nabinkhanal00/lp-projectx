@@ -52,8 +52,8 @@ const handleDisplayDetails = (h) => {
     input.value = h.expression
     result.classList.remove("text-red-500")
     result.classList.add("text-blue-500")
-    result.innerHTML = `Result: ${h.result}`
-    query.innerHTML = `Query: ${h.expression}`
+    result.innerHTML = `= ${h.result}`
+    query.innerHTML = `${h.expression}`
 
     steps.innerHTML = ""
     if (h.steps) {
