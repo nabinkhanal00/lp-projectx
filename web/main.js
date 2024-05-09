@@ -93,14 +93,14 @@ const handleDeleteSingleHistory = (event) => {
 const handleAddHistory = (h) => {
     let button = document.createElement("button")
     button.id = h.id + "-delete"
-    button.classList = "text-sm absolute right-2 px-4 text-red-500"
+    button.classList = ""
     button.addEventListener('click', handleDeleteSingleHistory)
     button.innerHTML = "🗑"
     let li = document.createElement("li")
     li.appendChild(document.createTextNode(`${h.expression} = ${h.result}`))
     li.appendChild(button)
     li.id = h.id;
-    li.classList = "bg-gray-100 p-2 rounded-md cursor-pointer relative"
+    li.classList = "flex items-center justify-between bg-gray-100 p-2 rounded-md cursor-pointer relative"
     li.addEventListener('click', handleHistoryClick)
     history.appendChild(li)
 }
