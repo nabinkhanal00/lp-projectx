@@ -30,6 +30,9 @@ for (let button of calculatorButtons) {
         switch (button.id) {
             case "C":
                 input.value = ""
+                result.innerHTML = "0"
+                result.classList.remove('text-red-500')
+                result.classList.add('text-blue-500')
                 break
             default:
                 insertAtCaret(input, button.id)
