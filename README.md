@@ -48,4 +48,4 @@ go test ./...
 - [ ] Improve UI/UX
 
 ## Comment
-I will be happy getting pull requests and issues regarding bug-fixes, improvements and features.
+I will be happy getting pull requests and issues regarding bug-fixes, improvements, features, and tests.
