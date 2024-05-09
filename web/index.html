@@ -21,13 +21,16 @@
             <h1 class="text-4xl font-bold text-gray-800">Powerful Calculator</h1>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
-            <div class="bg-white p-4 rounded-lg shadow-md overflow-y-auto output-section">
-                <h2 class="relative text-lg font-bold mb-4">History
+            <div class="bg-white px-4 pb-4 rounded-lg shadow-md overflow-y-auto output-section relative">
+                <div class="sticky top-0 z-50 ">
+                    <h2 class="text-lg  py-4 font-bold bg-white left-0">History
+                    </h2>
+
                     <button id="historyClearBtn"
-                        class="absolute right-0 bg-red-400 text-white btn px-2 rounded-lg">Clear</button>
-                </h2>
-                <ul id="history" class="list-disc pl-4 space-y-2">
-                </ul>
+                        class="absolute right-0 top-4 bg-red-400 text-white btn px-2 rounded-lg">Clear</button>
+                </div>
+                <ol id="history" class="list-disc pl-4 space-y-2 z-10">
+                </ol>
             </div>
             <div class="bg-gray-300 p-8 rounded-3xl shadow-inner h-full overflow-y-auto">
                 <h2 class="text-lg font-bold mb-4 text-center">Calculator</h2>
@@ -121,9 +124,9 @@
                 </div>
             </div>
 
-            <div class="bg-white px-4 rounded-lg shadow-md overflow-y-auto output-section relative">
+            <div class="bg-white px-4 pb-4 rounded-lg shadow-md overflow-y-auto output-section relative">
                 <div class="sticky top-0 ">
-                    <h2 class="text-lg py-5 font-bold bg-white left-0">Evaluation Process</h2>
+                    <h2 class="text-lg py-4 font-bold bg-white left-0">Evaluation Process</h2>
                     <div id="query" class="text-lg font-bold bg-gray-100 p-2 mb-5 rounded-md overflow-x-auto"> </div>
                 </div>
 
