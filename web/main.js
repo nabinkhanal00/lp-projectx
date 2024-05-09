@@ -10,7 +10,8 @@ input.focus()
 
 const insertAtCaret = (element, text) => {
     text = text || '';
-    if (element.selectionStart || element.selectionStart === 0) {
+    // check if the browser supports the property
+    if (element.selectionStart) {
         // Others
         var startPos = element.selectionStart;
         var endPos = element.selectionEnd;
@@ -19,6 +20,7 @@ const insertAtCaret = (element, text) => {
             element.value.substring(endPos, element.value.length);
         element.selectionStart = startPos + text.length;
         element.selectionEnd = startPos + text.length;
+        element.scrollLeft = element.scrollWidth
     } else {
         element.value += text;
     }
