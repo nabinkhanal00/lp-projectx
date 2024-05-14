@@ -159,6 +159,11 @@ const handleCalculate = async () => {
                 result: data.answer,
                 steps: data.steps
             }
+            histories = histories.filter(hs => hs.expression != h.expression)
+            history.innerHTML = ""
+            for (let h of histories) {
+                handleAddHistory(h)
+            }
             histories.push(h)
             localStorage.setItem("histories", JSON.stringify(histories))
             handleResult(h)
