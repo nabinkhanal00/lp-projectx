@@ -96,9 +96,10 @@ const handleDeleteSingleHistory = (event) => {
 const handleAddHistory = (h) => {
     let button = document.createElement("button")
     button.id = h.id + "-delete"
-    button.classList = ""
+    button.classList = "text-red-500"
     button.addEventListener('click', handleDeleteSingleHistory)
-    button.innerHTML = "🗑"
+    // button.innerHTML = "🗑"
+    button.innerHTML = "X"
     let li = document.createElement("li")
     li.appendChild(document.createTextNode(`${h.expression} = ${h.result}`))
     li.appendChild(button)
@@ -131,23 +132,21 @@ const handleEmpty = () => {
 }
 
 const handleCalculate = async () => {
-    const query = document.getElementById("input")
+    let query = document.getElementById("input")
     if (query.value == "") {
         handleEmpty()
         return
     }
-    const body = {
-        query: query.value
-    }
+    let queryValue = query.value;
     try {
-        const response = await fetch("/calculate", {
-            "method": "POST",
-            "body": JSON.stringify(body),
-            "headers": {
-                "Content-Type": "application/json"
-            }
+        const go = new Go();
+
+        WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
+            go.run(result.instance);
         })
-        const data = await response.json()
+        const content = Calculate(queryValue);
+
+        const data = JSON.parse(content)
         if (data.error) {
             handleError(data)
         } else {

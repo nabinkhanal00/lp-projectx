@@ -1,4 +1,4 @@
-package calculate
+package main
 
 import (
 	"fmt"
