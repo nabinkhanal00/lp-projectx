@@ -98,8 +98,8 @@ const handleAddHistory = (h) => {
     button.id = h.id + "-delete"
     button.classList = "text-red-500"
     button.addEventListener('click', handleDeleteSingleHistory)
-    // button.innerHTML = "🗑"
-    button.innerHTML = "X"
+    button.innerHTML = "🗑"
+    // button.innerHTML = "X"
     let li = document.createElement("li")
     li.appendChild(document.createTextNode(`${h.expression} = ${h.result}`))
     li.appendChild(button)
