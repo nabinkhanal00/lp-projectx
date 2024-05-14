@@ -8,6 +8,12 @@ let calculate = document.getElementById("calculate")
 let historyClearBtn = document.getElementById("historyClearBtn")
 input.focus()
 
+// instantiate wasm at start
+const go = new Go();
+WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
+    go.run(result.instance);
+})
+
 const insertAtCaret = (element, text) => {
     text = text || '';
     // check if the browser supports the property
@@ -139,11 +145,6 @@ const handleCalculate = async () => {
     }
     let queryValue = query.value;
     try {
-        const go = new Go();
-
-        WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
-            go.run(result.instance);
-        })
         const content = Calculate(queryValue);
 
         const data = JSON.parse(content)
